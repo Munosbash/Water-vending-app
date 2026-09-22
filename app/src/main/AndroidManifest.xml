@@ -18,6 +18,10 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+            <activity
+    android:name=".ClientsActivity"
+    android:exported="false" />
+
     </application>
 
 </manifest>

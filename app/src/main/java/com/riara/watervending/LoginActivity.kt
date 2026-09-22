@@ -27,13 +27,13 @@ class LoginActivity : Activity() {
                 return@setOnClickListener
             }
 
-            if (username == "owner" && password == "1234") {
-                errorText.text = "Login successful (Owner) - Dashboard coming in Part 6"
-            } else if (username == "staff" && password == "1234") {
-                errorText.text = "Login successful (Staff) - Dashboard coming in Part 3"
-            } else {
-                errorText.text = "Invalid username or password"
-            }
+           if (username == "owner" && password == "1234") {
+    startActivity(Intent(this, ClientsActivity::class.java))
+} else if (username == "staff" && password == "1234") {
+    startActivity(Intent(this, ClientsActivity::class.java))
+} else {
+    errorText.text = "Invalid username or password"
+}
         }
     }
 }
