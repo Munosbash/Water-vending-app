@@ -1,5 +1,6 @@
 package com.riara.watervending
 
+import android.content.Intent
 import android.app.Activity
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -26,6 +27,11 @@ class ClientsActivity : Activity() {
 
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, clientList)
         listView.adapter = adapter
+
+                val goToInventoryButton = findViewById<Button>(R.id.goToInventoryButton)
+        goToInventoryButton.setOnClickListener {
+            startActivity(Intent(this, InventoryActivity::class.java))
+        }
 
         addButton.setOnClickListener {
             val name = nameInput.text.toString().trim()

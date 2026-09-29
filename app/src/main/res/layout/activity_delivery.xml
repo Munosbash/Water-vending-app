@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delivery Log"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/deliveryClientInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Client Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/deliveryBottlesInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number of Bottles Dispatched"
+        android:inputType="number"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/logDeliveryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log Delivery"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delivery History:"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp" />
+
+    <ListView
+        android:id="@+id/deliveryListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>
