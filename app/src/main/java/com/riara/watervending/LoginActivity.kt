@@ -27,8 +27,8 @@ class LoginActivity : Activity() {
                 return@setOnClickListener
             }
 
-           if (username == "owner" && password == "1234") {
-    startActivity(Intent(this, ClientsActivity::class.java))
+ if (username == "owner" && password == "1234") {
+    startActivity(Intent(this, DashboardActivity::class.java))
 } else if (username == "staff" && password == "1234") {
     startActivity(Intent(this, ClientsActivity::class.java))
 } else {

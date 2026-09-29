@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Owner Dashboard"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Business Summary"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Note: Figures below are session-only placeholders. Full profit/loss tracking will be enabled once the system is connected to Firebase (Part 7)."
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:id="@+id/viewClientsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Clients" />
+
+    <Button
+        android:id="@+id/viewInventoryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Inventory"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/viewDeliveriesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Delivery Log"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>
