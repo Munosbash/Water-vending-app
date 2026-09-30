@@ -15,6 +15,14 @@ class DashboardActivity : Activity() {
         val viewInventoryButton = findViewById<Button>(R.id.viewInventoryButton)
         val viewDeliveriesButton = findViewById<Button>(R.id.viewDeliveriesButton)
 
+                val logoutButton = findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
+        
         viewClientsButton.setOnClickListener {
             startActivity(Intent(this, ClientsActivity::class.java))
         }

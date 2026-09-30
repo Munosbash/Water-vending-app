@@ -72,4 +72,12 @@
         android:text="Go to Inventory"
         android:layout_marginTop="12dp" />
 
+        <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:backgroundTint="#B00020"
+        android:layout_marginTop="8dp" />
+
 </LinearLayout>

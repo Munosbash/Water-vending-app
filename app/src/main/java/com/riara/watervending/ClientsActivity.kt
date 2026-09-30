@@ -33,6 +33,14 @@ class ClientsActivity : Activity() {
             startActivity(Intent(this, InventoryActivity::class.java))
         }
 
+                val logoutButton = findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
+
         addButton.setOnClickListener {
             val name = nameInput.text.toString().trim()
             val location = locationInput.text.toString().trim()
