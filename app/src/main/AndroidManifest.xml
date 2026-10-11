@@ -34,6 +34,10 @@
     android:name=".DashboardActivity"
     android:exported="false" />
 
+    <activity
+    android:name=".StaffHomeActivity"
+    android:exported="false" />
+
     </application>
 
 </manifest>

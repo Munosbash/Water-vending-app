@@ -30,7 +30,7 @@ class LoginActivity : Activity() {
  if (username == "owner" && password == "1234") {
     startActivity(Intent(this, DashboardActivity::class.java))
 } else if (username == "staff" && password == "1234") {
-    startActivity(Intent(this, ClientsActivity::class.java))
+    startActivity(Intent(this, StaffHomeActivity::class.java))
 } else {
     errorText.text = "Invalid username or password"
 }

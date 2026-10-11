@@ -1,6 +1,5 @@
 package com.riara.watervending
 
-import android.content.Intent
 import android.app.Activity
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -35,11 +34,7 @@ class InventoryActivity : Activity() {
         val removeOneLitreButton = findViewById<Button>(R.id.removeOneLitreButton)
         val removeTwoLitreButton = findViewById<Button>(R.id.removeTwoLitreButton)
         val logView = findViewById<ListView>(R.id.inventoryLogView)
-                val goToDeliveryButton = findViewById<Button>(R.id.goToDeliveryButton)
-        goToDeliveryButton.setOnClickListener {
-            startActivity(Intent(this, DeliveryActivity::class.java))
-        }
-
+           
         logAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, logList)
         logView.adapter = logAdapter
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Staff Home"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What would you like to do?"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/staffClientsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add / View Clients" />
+
+    <Button
+        android:id="@+id/staffInventoryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Inventory Control"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/staffDeliveryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delivery Log"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/staffLogoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:backgroundTint="#B00020"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

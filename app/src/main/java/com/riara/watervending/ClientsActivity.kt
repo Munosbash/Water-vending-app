@@ -28,10 +28,6 @@ class ClientsActivity : Activity() {
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, clientList)
         listView.adapter = adapter
 
-                val goToInventoryButton = findViewById<Button>(R.id.goToInventoryButton)
-        goToInventoryButton.setOnClickListener {
-            startActivity(Intent(this, InventoryActivity::class.java))
-        }
 
                 val logoutButton = findViewById<Button>(R.id.logoutButton)
         logoutButton.setOnClickListener {
