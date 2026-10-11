@@ -49,6 +49,13 @@
         android:text="View Delivery Log"
         android:layout_marginTop="8dp" />
 
+            <Button
+        android:id="@+id/manageStaffButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Staff"
+        android:layout_marginTop="8dp" />
+
      <Button
         android:id="@+id/logoutButton"
         android:layout_width="match_parent"

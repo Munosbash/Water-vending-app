@@ -27,9 +27,9 @@ class LoginActivity : Activity() {
                 return@setOnClickListener
             }
 
- if (username == "owner" && password == "1234") {
+if (username == "owner" && password == "1234") {
     startActivity(Intent(this, DashboardActivity::class.java))
-} else if (username == "staff" && password == "1234") {
+} else if (UserStore.checkStaffLogin(this, username.lowercase(), password)) {
     startActivity(Intent(this, StaffHomeActivity::class.java))
 } else {
     errorText.text = "Invalid username or password"
