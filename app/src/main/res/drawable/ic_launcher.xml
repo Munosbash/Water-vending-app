@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Blue circle background -->
+    <path
+        android:fillColor="#1E88E5"
+        android:pathData="M54,54 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0" />
+
+    <!-- White water drop -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,20 C54,20 33,45 33,60 C33,72 42,82 54,82 C66,82 75,72 75,60 C75,45 54,20 54,20 Z" />
+
+    <!-- Small light-blue shine on the drop -->
+    <path
+        android:fillColor="#BBDEFB"
+        android:pathData="M44,62 C44,68 48,73 54,74 C49,72 46,68 46,62 Z" />
+
+</vector>
