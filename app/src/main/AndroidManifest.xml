@@ -4,6 +4,7 @@
         <application
         android:icon="@drawable/ic_launcher"
         android:roundIcon="@drawable/ic_launcher"
+        android:theme="@style/WaterTheme"
         android:label="Water Vending"
         android:allowBackup="true">
 

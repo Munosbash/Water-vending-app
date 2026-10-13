@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="water_primary">#1E88E5</color>
+    <color name="water_dark">#1565C0</color>
+    <color name="water_accent">#00ACC1</color>
+    <color name="water_background">#E3F2FD</color>
+</resources>

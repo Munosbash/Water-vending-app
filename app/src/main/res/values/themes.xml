@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="WaterTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/water_primary</item>
+        <item name="android:colorPrimaryDark">@color/water_dark</item>
+        <item name="android:colorAccent">@color/water_accent</item>
+        <item name="android:windowBackground">@color/water_background</item>
+        <item name="android:buttonStyle">@style/WaterButton</item>
+    </style>
+
+    <style name="WaterButton" parent="android:Widget.Material.Button">
+        <item name="android:backgroundTint">@color/water_primary</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+</resources>
