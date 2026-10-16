@@ -27,13 +27,28 @@ class LoginActivity : Activity() {
                 return@setOnClickListener
             }
 
-if (username == "owner" && password == "1234") {
-    startActivity(Intent(this, DashboardActivity::class.java))
-} else if (UserStore.checkStaffLogin(this, username.lowercase(), password)) {
-    startActivity(Intent(this, StaffHomeActivity::class.java))
-} else {
-    errorText.text = "Invalid username or password"
-}
+            // The owner account is fixed
+            if (username == "owner" && password == "1234") {
+                errorText.text = ""
+                startActivity(Intent(this, DashboardActivity::class.java))
+                return@setOnClickListener
+            }
+
+            // Staff accounts are checked in the cloud database
+            errorText.text = "Checking..."
+            UserStore.checkStaffLogin(
+                username.lowercase(),
+                password,
+                { ok ->
+                    if (ok) {
+                        errorText.text = ""
+                        startActivity(Intent(this, StaffHomeActivity::class.java))
+                    } else {
+                        errorText.text = "Invalid username or password"
+                    }
+                },
+                { errorText.text = "Could not connect. Check your internet" }
+            )
         }
     }
 }

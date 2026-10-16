@@ -1,32 +1,15 @@
 package com.riara.watervending
 
-import android.content.Context
-import android.content.SharedPreferences
+import com.google.firebase.firestore.FirebaseFirestore
 
+// Each staff account is one record in the "staff" collection.
+// The record name is the username, and it holds the password.
 object UserStore {
 
-    private const val PREFS = "users_prefs"
-    private const val KEY_STAFF_LIST = "staff_list"
+    private val db = FirebaseFirestore.getInstance()
 
-    // Opens the phone's saved data. First time only, it creates one starter staff account.
-    private fun prefs(context: Context): SharedPreferences {
-        val p = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        if (!p.contains(KEY_STAFF_LIST)) {
-            p.edit()
-                .putString(KEY_STAFF_LIST, "staff")
-                .putString("pass_staff", "1234")
-                .apply()
-        }
-        return p
-    }
-
-    fun getStaffNames(context: Context): MutableList<String> {
-        val saved = prefs(context).getString(KEY_STAFF_LIST, "") ?: ""
-        if (saved.isEmpty()) return mutableListOf()
-        return saved.split(",").toMutableList()
-    }
-
-    fun checkUsername(context: Context, username: String): String? {
+    // Checks the shape of a username. Returns an error message, or null if fine.
+    fun checkUsernameFormat(username: String): String? {
         if (username.length < 4) return "Username must be at least 4 characters"
         if (!username.all { it.isLetterOrDigit() || it == '_' }) {
             return "Username can only have letters, numbers and underscore"
@@ -35,7 +18,6 @@ object UserStore {
             return "Username must contain a letter (it cannot be only numbers)"
         }
         if (username == "owner") return "That username is reserved"
-        if (getStaffNames(context).contains(username)) return "That username already exists"
         return null
     }
 
@@ -47,30 +29,47 @@ object UserStore {
         return null
     }
 
-    fun addStaff(context: Context, username: String, password: String) {
-        val names = getStaffNames(context)
-        names.add(username)
-        prefs(context).edit()
-            .putString(KEY_STAFF_LIST, names.joinToString(","))
-            .putString("pass_$username", password)
-            .apply()
+    fun getStaffNames(onResult: (List<String>) -> Unit, onError: () -> Unit) {
+        db.collection("staff").get()
+            .addOnSuccessListener { result ->
+                onResult(result.documents.map { it.id }.sorted())
+            }
+            .addOnFailureListener { onError() }
     }
 
-    fun changePassword(context: Context, username: String, newPassword: String) {
-        prefs(context).edit().putString("pass_$username", newPassword).apply()
+    fun addStaff(username: String, password: String, onDone: () -> Unit, onError: (String) -> Unit) {
+        val ref = db.collection("staff").document(username)
+        ref.get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    onError("That username already exists")
+                } else {
+                    ref.set(hashMapOf("password" to password))
+                        .addOnSuccessListener { onDone() }
+                        .addOnFailureListener { onError("Could not save. Check your internet") }
+                }
+            }
+            .addOnFailureListener { onError("Could not connect. Check your internet") }
     }
 
-        fun deleteStaff(context: Context, username: String) {
-        val names = getStaffNames(context)
-        names.remove(username)
-        prefs(context).edit()
-            .putString(KEY_STAFF_LIST, names.joinToString(","))
-            .remove("pass_$username")
-            .apply()
+    fun changePassword(username: String, newPassword: String, onDone: () -> Unit, onError: (String) -> Unit) {
+        db.collection("staff").document(username)
+            .set(hashMapOf("password" to newPassword))
+            .addOnSuccessListener { onDone() }
+            .addOnFailureListener { onError("Could not save. Check your internet") }
     }
 
-    fun checkStaffLogin(context: Context, username: String, password: String): Boolean {
-        val saved = prefs(context).getString("pass_$username", null)
-        return saved != null && saved == password
+    fun deleteStaff(username: String, onDone: () -> Unit, onError: (String) -> Unit) {
+        db.collection("staff").document(username).delete()
+            .addOnSuccessListener { onDone() }
+            .addOnFailureListener { onError("Could not delete. Check your internet") }
+    }
+
+    fun checkStaffLogin(username: String, password: String, onResult: (Boolean) -> Unit, onError: () -> Unit) {
+        db.collection("staff").document(username).get()
+            .addOnSuccessListener { doc ->
+                onResult(doc.exists() && doc.getString("password") == password)
+            }
+            .addOnFailureListener { onError() }
     }
 }

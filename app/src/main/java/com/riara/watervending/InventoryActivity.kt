@@ -8,8 +8,13 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 
 class InventoryActivity : Activity() {
+
+    private val db = FirebaseFirestore.getInstance()
 
     private var stockOneLitre = 0
     private var stockTwoLitre = 0
@@ -34,53 +39,81 @@ class InventoryActivity : Activity() {
         val removeOneLitreButton = findViewById<Button>(R.id.removeOneLitreButton)
         val removeTwoLitreButton = findViewById<Button>(R.id.removeTwoLitreButton)
         val logView = findViewById<ListView>(R.id.inventoryLogView)
-           
+
         logAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, logList)
         logView.adapter = logAdapter
 
-        addOneLitreButton.setOnClickListener {
-            val qty = getQuantity()
-            if (qty != null) {
-                stockOneLitre += qty
+        loadStock()
+        loadLog()
+
+        addOneLitreButton.setOnClickListener { changeStock(true, true) }
+        addTwoLitreButton.setOnClickListener { changeStock(false, true) }
+        removeOneLitreButton.setOnClickListener { changeStock(true, false) }
+        removeTwoLitreButton.setOnClickListener { changeStock(false, false) }
+    }
+
+    // Reads the saved stock counts from the database
+    private fun loadStock() {
+        db.collection("inventory").document("stock").get()
+            .addOnSuccessListener { doc ->
+                stockOneLitre = (doc.getLong("oneLitre") ?: 0L).toInt()
+                stockTwoLitre = (doc.getLong("twoLitre") ?: 0L).toInt()
                 updateStockDisplay()
-                addLog("Added $qty x 1L bottles to stock")
             }
-        }
-
-        addTwoLitreButton.setOnClickListener {
-            val qty = getQuantity()
-            if (qty != null) {
-                stockTwoLitre += qty
-                updateStockDisplay()
-                addLog("Added $qty x 2L bottles to stock")
+            .addOnFailureListener {
+                Toast.makeText(this, "Could not load stock. Check your internet", Toast.LENGTH_LONG).show()
             }
-        }
+    }
 
-        removeOneLitreButton.setOnClickListener {
-            val qty = getQuantity()
-            if (qty != null) {
-                if (qty > stockOneLitre) {
-                    Toast.makeText(this, "Not enough 1L stock available", Toast.LENGTH_SHORT).show()
-                } else {
-                    stockOneLitre -= qty
-                    updateStockDisplay()
-                    addLog("Used/Spilled $qty x 1L bottles")
+    // Reads the latest 50 log entries, newest first
+    private fun loadLog() {
+        db.collection("inventory_log")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .limit(50)
+            .get()
+            .addOnSuccessListener { result ->
+                logList.clear()
+                for (doc in result) {
+                    logList.add(doc.getString("message") ?: "")
                 }
+                logAdapter.notifyDataSetChanged()
             }
+    }
+
+    // One function handles all four buttons
+    private fun changeStock(oneLitre: Boolean, adding: Boolean) {
+        val qty = getQuantity() ?: return
+        val size = if (oneLitre) "1L" else "2L"
+        val current = if (oneLitre) stockOneLitre else stockTwoLitre
+
+        if (!adding && qty > current) {
+            Toast.makeText(this, "Not enough $size stock available", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        removeTwoLitreButton.setOnClickListener {
-            val qty = getQuantity()
-            if (qty != null) {
-                if (qty > stockTwoLitre) {
-                    Toast.makeText(this, "Not enough 2L stock available", Toast.LENGTH_SHORT).show()
-                } else {
-                    stockTwoLitre -= qty
-                    updateStockDisplay()
-                    addLog("Used/Spilled $qty x 2L bottles")
-                }
-            }
+        val newValue = if (adding) current + qty else current - qty
+        if (oneLitre) stockOneLitre = newValue else stockTwoLitre = newValue
+
+        updateStockDisplay()
+        saveStock()
+
+        if (adding) {
+            addLog("Added $qty x $size bottles to stock")
+        } else {
+            addLog("Used/Spilled $qty x $size bottles")
         }
+    }
+
+    private fun saveStock() {
+        val stock = hashMapOf(
+            "oneLitre" to stockOneLitre,
+            "twoLitre" to stockTwoLitre
+        )
+        db.collection("inventory").document("stock")
+            .set(stock, SetOptions.merge())
+            .addOnFailureListener {
+                Toast.makeText(this, "Could not save stock. Check your internet", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun getQuantity(): Int? {
@@ -104,6 +137,11 @@ class InventoryActivity : Activity() {
     }
 
     private fun addLog(message: String) {
+        val entry = hashMapOf(
+            "message" to message,
+            "createdAt" to System.currentTimeMillis()
+        )
+        db.collection("inventory_log").add(entry)
         logList.add(0, message)
         logAdapter.notifyDataSetChanged()
     }

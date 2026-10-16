@@ -12,6 +12,8 @@ import android.widget.TextView
 class ManageStaffActivity : Activity() {
 
     private var selectedStaff: String? = null
+    private val staffNames = mutableListOf<String>()
+    private lateinit var adapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,15 +29,16 @@ class ManageStaffActivity : Activity() {
         val changeButton = findViewById<Button>(R.id.changePasswordButton)
         val deleteButton = findViewById<Button>(R.id.deleteStaffButton)
 
-        val staffNames = UserStore.getStaffNames(this)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, staffNames)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, staffNames)
         listView.adapter = adapter
+
+        loadStaff(message)
 
         addButton.setOnClickListener {
             val username = usernameInput.text.toString().trim().lowercase()
             val password = passwordInput.text.toString()
 
-            val usernameError = UserStore.checkUsername(this, username)
+            val usernameError = UserStore.checkUsernameFormat(username)
             if (usernameError != null) {
                 message.text = usernameError
                 return@setOnClickListener
@@ -47,13 +50,18 @@ class ManageStaffActivity : Activity() {
                 return@setOnClickListener
             }
 
-            UserStore.addStaff(this, username, password)
-            staffNames.add(username)
-            adapter.notifyDataSetChanged()
-
-            usernameInput.text.clear()
-            passwordInput.text.clear()
-            message.text = "Staff '$username' added"
+            message.text = "Saving..."
+            UserStore.addStaff(
+                username,
+                password,
+                {
+                    usernameInput.text.clear()
+                    passwordInput.text.clear()
+                    message.text = "Staff '$username' added"
+                    loadStaff(message)
+                },
+                { error -> message.text = error }
+            )
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->
@@ -75,9 +83,15 @@ class ManageStaffActivity : Activity() {
                 return@setOnClickListener
             }
 
-            UserStore.changePassword(this, staff, newPassword)
-            changePasswordInput.text.clear()
-            message.text = "Password changed for '$staff'"
+            UserStore.changePassword(
+                staff,
+                newPassword,
+                {
+                    changePasswordInput.text.clear()
+                    message.text = "Password changed for '$staff'"
+                },
+                { error -> message.text = error }
+            )
         }
 
         deleteButton.setOnClickListener {
@@ -91,15 +105,31 @@ class ManageStaffActivity : Activity() {
                 .setTitle("Delete staff")
                 .setMessage("Delete '$staff'? They will no longer be able to log in.")
                 .setPositiveButton("Delete") { _, _ ->
-                    UserStore.deleteStaff(this, staff)
-                    staffNames.remove(staff)
-                    adapter.notifyDataSetChanged()
-                    selectedStaff = null
-                    selectedText.text = "Selected: none"
-                    message.text = "Staff '$staff' deleted"
+                    UserStore.deleteStaff(
+                        staff,
+                        {
+                            selectedStaff = null
+                            selectedText.text = "Selected: none"
+                            message.text = "Staff '$staff' deleted"
+                            loadStaff(message)
+                        },
+                        { error -> message.text = error }
+                    )
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
         }
+    }
+
+    // Reloads the list of staff names from the database
+    private fun loadStaff(message: TextView) {
+        UserStore.getStaffNames(
+            { names ->
+                staffNames.clear()
+                staffNames.addAll(names)
+                adapter.notifyDataSetChanged()
+            },
+            { message.text = "Could not load staff. Check your internet" }
+        )
     }
 }

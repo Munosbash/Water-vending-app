@@ -7,12 +7,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class DeliveryActivity : Activity() {
 
+    private val db = FirebaseFirestore.getInstance()
     private val deliveryList = mutableListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
 
@@ -27,6 +30,8 @@ class DeliveryActivity : Activity() {
 
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, deliveryList)
         listView.adapter = adapter
+
+        loadDeliveries()
 
         logButton.setOnClickListener {
             val clientName = clientInput.text.toString().trim()
@@ -43,15 +48,44 @@ class DeliveryActivity : Activity() {
                 return@setOnClickListener
             }
 
-            val timestamp = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date())
-            val entry = "$clientName - $bottles bottles - $timestamp"
-            deliveryList.add(0, entry)
-            adapter.notifyDataSetChanged()
+            val timeText = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date())
 
-            clientInput.text.clear()
-            bottlesInput.text.clear()
+            val delivery = hashMapOf(
+                "client" to clientName,
+                "bottles" to bottles,
+                "timeText" to timeText,
+                "createdAt" to System.currentTimeMillis()
+            )
 
-            Toast.makeText(this, "Delivery logged", Toast.LENGTH_SHORT).show()
+            db.collection("deliveries").add(delivery)
+                .addOnSuccessListener {
+                    clientInput.text.clear()
+                    bottlesInput.text.clear()
+                    Toast.makeText(this, "Delivery logged", Toast.LENGTH_SHORT).show()
+                    loadDeliveries()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Could not save. Check your internet", Toast.LENGTH_LONG).show()
+                }
         }
+    }
+
+    // Reads the latest 100 deliveries, newest first
+    private fun loadDeliveries() {
+        db.collection("deliveries")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .limit(100)
+            .get()
+            .addOnSuccessListener { result ->
+                deliveryList.clear()
+                for (doc in result) {
+                    val line = "${doc.getString("client")} - ${doc.getLong("bottles")} bottles - ${doc.getString("timeText")}"
+                    deliveryList.add(line)
+                }
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Could not load deliveries. Check your internet", Toast.LENGTH_LONG).show()
+            }
     }
 }
