@@ -14,21 +14,6 @@
         android:textStyle="bold"
         android:layout_marginBottom="24dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Business Summary"
-        android:textSize="16sp"
-        android:layout_marginBottom="12dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Note: Figures below are session-only placeholders. Full profit/loss tracking will be enabled once the system is connected to Firebase (Part 7)."
-        android:textSize="12sp"
-        android:textStyle="italic"
-        android:layout_marginBottom="20dp" />
-
     <Button
         android:id="@+id/viewClientsButton"
         android:layout_width="match_parent"
@@ -49,14 +34,14 @@
         android:text="View Delivery Log"
         android:layout_marginTop="8dp" />
 
-            <Button
+    <Button
         android:id="@+id/manageStaffButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Manage Staff"
         android:layout_marginTop="8dp" />
 
-     <Button
+    <Button
         android:id="@+id/logoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
