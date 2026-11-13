@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : Activity() {
 
@@ -27,11 +28,24 @@ class LoginActivity : Activity() {
                 return@setOnClickListener
             }
 
-            // The owner account is fixed
-            if (username == "owner" && password == "1234") {
-                errorText.text = ""
-                Session.username = "owner"
-                startActivity(Intent(this, DashboardActivity::class.java))
+            // The owner password is kept in the cloud database.
+            // Until the owner changes it, the starting password 1234 is used.
+            if (username == "owner") {
+                errorText.text = "Checking..."
+                FirebaseFirestore.getInstance().collection("settings").document("owner").get()
+                    .addOnSuccessListener { doc ->
+                        val ownerPassword = doc.getString("password") ?: "1234"
+                        if (password == ownerPassword) {
+                            errorText.text = ""
+                            Session.username = "owner"
+                            startActivity(Intent(this, DashboardActivity::class.java))
+                        } else {
+                            errorText.text = "Invalid username or password"
+                        }
+                    }
+                    .addOnFailureListener {
+                        errorText.text = "Could not connect. Check your internet"
+                    }
                 return@setOnClickListener
             }
 

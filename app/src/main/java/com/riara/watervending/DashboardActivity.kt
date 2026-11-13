@@ -14,7 +14,9 @@ class DashboardActivity : Activity() {
         val viewClientsButton = findViewById<Button>(R.id.viewClientsButton)
         val viewInventoryButton = findViewById<Button>(R.id.viewInventoryButton)
         val viewDeliveriesButton = findViewById<Button>(R.id.viewDeliveriesButton)
+        val reportsButton = findViewById<Button>(R.id.reportsButton)
         val manageStaffButton = findViewById<Button>(R.id.manageStaffButton)
+        val changePasswordButton = findViewById<Button>(R.id.changePasswordButton)
         val logoutButton = findViewById<Button>(R.id.logoutButton)
 
         viewClientsButton.setOnClickListener {
@@ -29,8 +31,16 @@ class DashboardActivity : Activity() {
             startActivity(Intent(this, DeliveryActivity::class.java))
         }
 
+        reportsButton.setOnClickListener {
+            startActivity(Intent(this, ReportsActivity::class.java))
+        }
+
         manageStaffButton.setOnClickListener {
             startActivity(Intent(this, ManageStaffActivity::class.java))
+        }
+
+        changePasswordButton.setOnClickListener {
+            startActivity(Intent(this, ChangeOwnerPasswordActivity::class.java))
         }
 
         logoutButton.setOnClickListener {

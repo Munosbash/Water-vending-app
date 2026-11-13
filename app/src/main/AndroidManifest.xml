@@ -48,6 +48,8 @@
             android:name=".ManageStaffActivity"
             android:exported="false" />
 
+        <activity android:name=".ReportsActivity" />
+        <activity android:name=".ChangeOwnerPasswordActivity" />
     </application>
 
 </manifest>

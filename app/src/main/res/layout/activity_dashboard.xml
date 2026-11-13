@@ -1,52 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal">
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Owner Dashboard"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
-
-    <Button
-        android:id="@+id/viewClientsButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Clients" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/viewInventoryButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Inventory"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner Dashboard"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/viewDeliveriesButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Delivery Log"
-        android:layout_marginTop="8dp" />
+        <Button
+            android:id="@+id/viewClientsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Clients" />
 
-    <Button
-        android:id="@+id/manageStaffButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Manage Staff"
-        android:layout_marginTop="8dp" />
+        <Button
+            android:id="@+id/viewInventoryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Inventory"
+            android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:backgroundTint="#B00020"
-        android:layout_marginTop="20dp" />
+        <Button
+            android:id="@+id/viewDeliveriesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Delivery Log"
+            android:layout_marginTop="8dp" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/reportsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reports"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/manageStaffButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Manage Staff"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/changePasswordButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Owner Password"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:backgroundTint="#B00020"
+            android:layout_marginTop="20dp" />
+    </LinearLayout>
+</ScrollView>
