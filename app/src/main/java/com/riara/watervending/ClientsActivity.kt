@@ -10,6 +10,9 @@ import android.widget.ListView
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ClientsActivity : Activity() {
 
@@ -60,6 +63,7 @@ class ClientsActivity : Activity() {
                 "location" to location,
                 "type" to type,
                 "contact" to contact,
+                "recordedBy" to Session.username,
                 "createdAt" to System.currentTimeMillis()
             )
 
@@ -99,7 +103,9 @@ class ClientsActivity : Activity() {
                 for (doc in result) {
                     val line = "${doc.getString("name")} | ${doc.getString("type")} | " +
                         "${doc.getString("location")} | ${doc.getString("contact")}"
-                    clientList.add(line)
+                    val by = doc.getString("recordedBy") ?: "unknown"
+                    val whenText = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date(doc.getLong("createdAt") ?: 0L))
+                    clientList.add(line + "\n" + "Added " + whenText + " by " + by)
                 }
                 adapter.notifyDataSetChanged()
             }

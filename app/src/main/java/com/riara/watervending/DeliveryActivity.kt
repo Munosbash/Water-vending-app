@@ -84,6 +84,7 @@ class DeliveryActivity : Activity() {
                         "client" to clientName,
                         "bottles" to bottles,
                         "size" to sizeLabel,
+                        "recordedBy" to Session.username,
                         "timeText" to timeText,
                         "createdAt" to System.currentTimeMillis()
                     )
@@ -122,7 +123,7 @@ class DeliveryActivity : Activity() {
                 deliveryList.clear()
                 for (doc in result) {
                     val line = "${doc.getString("client")} - ${doc.getLong("bottles")} ${doc.getString("size") ?: ""} bottles - ${doc.getString("timeText")}"
-                    deliveryList.add(line)
+                    deliveryList.add(line + " - by " + (doc.getString("recordedBy") ?: "unknown"))
                 }
                 adapter.notifyDataSetChanged()
             }

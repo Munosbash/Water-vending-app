@@ -11,6 +11,9 @@ import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class InventoryActivity : Activity() {
 
@@ -148,9 +151,12 @@ class InventoryActivity : Activity() {
         stockTwoLitreText.text = "2L Bottles in stock: $stockTwoLitre"
     }
 
-    private fun addLog(message: String) {
+    private fun addLog(text: String) {
+        val time = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date())
+        val message = "$time - $text by ${Session.username}"
         val entry = hashMapOf(
             "message" to message,
+            "recordedBy" to Session.username,
             "createdAt" to System.currentTimeMillis()
         )
         db.collection("inventory_log").add(entry)

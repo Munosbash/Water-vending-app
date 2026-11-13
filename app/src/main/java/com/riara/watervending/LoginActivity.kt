@@ -30,6 +30,7 @@ class LoginActivity : Activity() {
             // The owner account is fixed
             if (username == "owner" && password == "1234") {
                 errorText.text = ""
+                Session.username = "owner"
                 startActivity(Intent(this, DashboardActivity::class.java))
                 return@setOnClickListener
             }
@@ -42,6 +43,7 @@ class LoginActivity : Activity() {
                 { ok ->
                     if (ok) {
                         errorText.text = ""
+                        Session.username = username.lowercase()
                         startActivity(Intent(this, StaffHomeActivity::class.java))
                     } else {
                         errorText.text = "Invalid username or password"
