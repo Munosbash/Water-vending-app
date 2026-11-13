@@ -45,6 +45,15 @@ class ClientsActivity : Activity() {
                 return@setOnClickListener
             }
 
+            // Stop here if the phone has no internet
+            if (!NetworkCheck.isOnline(this)) {
+                Toast.makeText(this, "No internet connection. Please connect and try again", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            // Disable the button so it cannot be tapped again while saving
+            addButton.isEnabled = false
+
             // One client = one record with these fields
             val client = hashMapOf(
                 "name" to name,
@@ -61,10 +70,12 @@ class ClientsActivity : Activity() {
                     typeInput.text.clear()
                     contactInput.text.clear()
                     Toast.makeText(this, "Client saved", Toast.LENGTH_SHORT).show()
+                    addButton.isEnabled = true
                     loadClients()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Could not save. Check your internet", Toast.LENGTH_LONG).show()
+                    addButton.isEnabled = true
                 }
         }
 

@@ -19,6 +19,9 @@ class InventoryActivity : Activity() {
     private var stockOneLitre = 0
     private var stockTwoLitre = 0
 
+    // True while a save is in progress, so extra taps are ignored
+    private var saving = false
+
     private val logList = mutableListOf<String>()
     private lateinit var logAdapter: ArrayAdapter<String>
 
@@ -82,6 +85,15 @@ class InventoryActivity : Activity() {
 
     // One function handles all four buttons
     private fun changeStock(oneLitre: Boolean, adding: Boolean) {
+        // Ignore taps while the last save is still running
+        if (saving) return
+
+        // Stop here if the phone has no internet
+        if (!NetworkCheck.isOnline(this)) {
+            Toast.makeText(this, "No internet connection. Please connect and try again", Toast.LENGTH_LONG).show()
+            return
+        }
+
         val qty = getQuantity() ?: return
         val size = if (oneLitre) "1L" else "2L"
         val current = if (oneLitre) stockOneLitre else stockTwoLitre
@@ -92,27 +104,27 @@ class InventoryActivity : Activity() {
         }
 
         val newValue = if (adding) current + qty else current - qty
-        if (oneLitre) stockOneLitre = newValue else stockTwoLitre = newValue
+        val field = if (oneLitre) "oneLitre" else "twoLitre"
 
-        updateStockDisplay()
-        saveStock()
+        saving = true
 
-        if (adding) {
-            addLog("Added $qty x $size bottles to stock")
-        } else {
-            addLog("Used/Spilled $qty x $size bottles")
-        }
-    }
-
-    private fun saveStock() {
-        val stock = hashMapOf(
-            "oneLitre" to stockOneLitre,
-            "twoLitre" to stockTwoLitre
-        )
+        // Save first. The screen and the log change only if the save works.
         db.collection("inventory").document("stock")
-            .set(stock, SetOptions.merge())
+            .set(hashMapOf(field to newValue), SetOptions.merge())
+            .addOnSuccessListener {
+                if (oneLitre) stockOneLitre = newValue else stockTwoLitre = newValue
+                updateStockDisplay()
+
+                if (adding) {
+                    addLog("Added $qty x $size bottles to stock")
+                } else {
+                    addLog("Used/Spilled $qty x $size bottles")
+                }
+                saving = false
+            }
             .addOnFailureListener {
                 Toast.makeText(this, "Could not save stock. Check your internet", Toast.LENGTH_LONG).show()
+                saving = false
             }
     }
 

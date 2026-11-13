@@ -50,7 +50,14 @@ class ManageStaffActivity : Activity() {
                 return@setOnClickListener
             }
 
+            // Stop here if the phone has no internet
+            if (!NetworkCheck.isOnline(this)) {
+                message.text = "No internet connection. Please connect and try again"
+                return@setOnClickListener
+            }
+
             message.text = "Saving..."
+            addButton.isEnabled = false
             UserStore.addStaff(
                 username,
                 password,
@@ -58,9 +65,13 @@ class ManageStaffActivity : Activity() {
                     usernameInput.text.clear()
                     passwordInput.text.clear()
                     message.text = "Staff '$username' added"
+                    addButton.isEnabled = true
                     loadStaff(message)
                 },
-                { error -> message.text = error }
+                { error ->
+                    message.text = error
+                    addButton.isEnabled = true
+                }
             )
         }
 
@@ -83,14 +94,25 @@ class ManageStaffActivity : Activity() {
                 return@setOnClickListener
             }
 
+            // Stop here if the phone has no internet
+            if (!NetworkCheck.isOnline(this)) {
+                message.text = "No internet connection. Please connect and try again"
+                return@setOnClickListener
+            }
+
+            changeButton.isEnabled = false
             UserStore.changePassword(
                 staff,
                 newPassword,
                 {
                     changePasswordInput.text.clear()
                     message.text = "Password changed for '$staff'"
+                    changeButton.isEnabled = true
                 },
-                { error -> message.text = error }
+                { error ->
+                    message.text = error
+                    changeButton.isEnabled = true
+                }
             )
         }
 
@@ -101,19 +123,30 @@ class ManageStaffActivity : Activity() {
                 return@setOnClickListener
             }
 
+            // Stop here if the phone has no internet
+            if (!NetworkCheck.isOnline(this)) {
+                message.text = "No internet connection. Please connect and try again"
+                return@setOnClickListener
+            }
+
             AlertDialog.Builder(this)
                 .setTitle("Delete staff")
                 .setMessage("Delete '$staff'? They will no longer be able to log in.")
                 .setPositiveButton("Delete") { _, _ ->
+                    deleteButton.isEnabled = false
                     UserStore.deleteStaff(
                         staff,
                         {
                             selectedStaff = null
                             selectedText.text = "Selected: none"
                             message.text = "Staff '$staff' deleted"
+                            deleteButton.isEnabled = true
                             loadStaff(message)
                         },
-                        { error -> message.text = error }
+                        { error ->
+                            message.text = error
+                            deleteButton.isEnabled = true
+                        }
                     )
                 }
                 .setNegativeButton("Cancel", null)
