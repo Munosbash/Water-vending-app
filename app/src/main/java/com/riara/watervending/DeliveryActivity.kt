@@ -51,6 +51,15 @@ class DeliveryActivity : Activity() {
                 return@setOnClickListener
             }
 
+            // Stop here if the phone has no internet
+            if (!NetworkCheck.isOnline(this)) {
+                Toast.makeText(this, "No internet connection. Please connect and try again", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            // Disable the button so it cannot be tapped again while saving
+            logButton.isEnabled = false
+
             // Which size was chosen, and which stock field belongs to it
             val isTwoLitre = sizeGroup.checkedRadioButtonId == R.id.size2Radio
             val sizeField = if (isTwoLitre) "twoLitre" else "oneLitre"
@@ -66,6 +75,7 @@ class DeliveryActivity : Activity() {
                     // Step 2: refuse if there are not enough bottles
                     if (bottles > stock) {
                         Toast.makeText(this, "Not enough $sizeLabel stock. Available: $stock", Toast.LENGTH_LONG).show()
+                        logButton.isEnabled = true
                         return@addOnSuccessListener
                     }
 
@@ -87,14 +97,17 @@ class DeliveryActivity : Activity() {
                             clientInput.text.clear()
                             bottlesInput.text.clear()
                             Toast.makeText(this, "Delivery logged", Toast.LENGTH_SHORT).show()
+                            logButton.isEnabled = true
                             loadDeliveries()
                         }
                         .addOnFailureListener {
                             Toast.makeText(this, "Could not save. Check your internet", Toast.LENGTH_LONG).show()
+                            logButton.isEnabled = true
                         }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Could not check stock. Check your internet", Toast.LENGTH_LONG).show()
+                    logButton.isEnabled = true
                 }
         }
     }
