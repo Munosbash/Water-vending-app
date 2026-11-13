@@ -28,6 +28,28 @@
         android:inputType="number"
         android:layout_marginTop="8dp" />
 
+        <RadioGroup
+        android:id="@+id/sizeGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/size1Radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="1 Litre" />
+
+        <RadioButton
+            android:id="@+id/size2Radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="2 Litre" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/logDeliveryButton"
         android:layout_width="match_parent"
